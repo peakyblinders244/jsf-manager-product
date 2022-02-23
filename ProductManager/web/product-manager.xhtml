@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Product Manager</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+</h:head>
+
+<h:body>
+    <div class="container">
+        <div class="row">
+            <div class="card">
+                <p:commandButton value="Add Product" type="button" icon="pi pi-external-link" onclick="PF('add-product').show()"/>
+            </div>
+        </div>
+
+        <div class="card product">
+            <h:form id="form-data-product">
+                <p:dataView var="product" value="#{Product.productList}" rows="12" paginator="true"
+                rowsPerPageTemplate="6,12,16"
+                paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            gridIcon="pi pi-th-large" listIcon="pi pi-bars">
+                    <p:dataViewGridItem>
+                        <div class="product-grid-item card border-1">
+                            <div class="product-grid-item-top">
+                                <div>
+                                    <i class="pi pi-tag product-category-icon"/>
+                                    <span class="product-category">#{Product.getNameCatalogById(product.catalogId)}</span>
+                                </div>
+                                <span class="product-badge">Test</span>
+                            </div>
+                            <div class="product-grid-item-content">
+                                <h:graphicImage value ="/images/#{product.image}" style="width: 100px; height: 100px"/>
+                                <div class="product-name">#{product.name}</div>
+                                <div class="product-description">No Comment</div>
+                                <p:rating readonly="true" value="5"/>
+                            </div>
+                            <div class="product-grid-item-bottom">
+                                <h:outputText value="#{product.price}" styleClass="product-price">
+                                    <f:convertNumber currencySymbol="$" type="currency"/>
+                                </h:outputText>
+                                <div>
+                                    <p:commandButton value="Edit" styleClass="rounded-button" icon="pi pi-check" update="form-edit"
+                                                     onclick="PF('edit-product').show()">
+
+                                        <f:setPropertyActionListener target="#{Product.productSelected}" value="#{product}"/>
+                                    </p:commandButton>
+
+                                    <p:commandButton value="Delete" styleClass="rounded-button ui-button-danger" icon="pi pi-times" action="#{Product.delete(product.id)}"
+                                    update="form-data-product">
+                                        <p:confirm header="Confirmation" message="Do you want to delete product?" icon="pi pi-info-circle"/>
+                                    </p:commandButton>
+                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+                                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
+                                    </p:confirmDialog>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </p:dataViewGridItem>
+
+                    <p:dataViewListItem>
+                        <div class="product-list-item">
+                            <h:graphicImage value ="/images/#{product.image}" style="width: 100px; height: 100px"/>
+                            <div class="product-list-detail">
+                                <div class="product-name">#{product.name}</div>
+                                <div class="product-description">No Comment</div>
+                                <p:rating readonly="true" value="4"/>
+                                <i class="pi pi-tag product-category-icon"/><span
+                                    class="product-category">#{Product.getNameCatalogById(product.catalogId)}</span>
+                            </div>
+
+                            <div class="product-list-action">
+                                <h:outputText value="#{product.price}" styleClass="product-price">
+                                    <f:convertNumber currencySymbol="$" type="currency"/>
+                                </h:outputText>
+                                <div>
+                                    <p:commandButton value="Edit" styleClass="rounded-button" icon="pi pi-check" update="form-edit"
+                                                     onclick="PF('edit-product').show()">
+
+                                        <f:setPropertyActionListener target="#{Product.productSelected}" value="#{product}"/>
+                                    </p:commandButton>
+
+                                    <p:commandButton value="Delete" styleClass="rounded-button ui-button-danger" icon="pi pi-times" action="#{Product.delete(product.id)}"
+                                                     update="form-data-product">
+                                        <p:confirm header="Confirmation" message="Do you want to delete product?" icon="pi pi-info-circle"/>
+                                    </p:commandButton>
+                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+                                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
+                                    </p:confirmDialog>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </p:dataViewListItem>
+                </p:dataView>
+
+            </h:form>
+        </div>
+    </div>
+
+
+
+    <!-- Modal Add Product -->
+    <p:dialog header="Add Product" widgetVar="add-product" minHeight="40" width="350" showEffect="fade" modal="true">
+        <h:form enctype="multipart/form-data" id="form-add">
+            <table>
+                <tr>
+                    <td>Name</td>
+                    <td>
+                        <h:inputText id="name" value="#{Product.productName}"></h:inputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Image</td>
+                    <td>
+                        <p:fileUpload id="image" mode="simple" value="#{Product.productImage}" required="true" allowTypes="/(\.|\/)(jpe?g|png)$/"></p:fileUpload>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Catalog</td>
+                    <td>
+                        <p:row>
+                            <p:selectOneMenu id="select-catalog" value="#{Product.productCatalogId}">
+                                <f:selectItems var="catalog" value="#{Catalog.catalogList}" itemValue="#{catalog.id}" itemLabel="#{catalog.name}"></f:selectItems>
+                            </p:selectOneMenu>
+                        </p:row>
+                        <div class="card">
+                            <p:commandButton value="Add Catalog" type="button" icon="pi pi-external-link" onclick="PF('add-catalog').show()"/>
+                        </div>
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td>Price</td>
+                    <td>
+                        <p:inputNumber id="price" value="#{Product.productPrice}"  ></p:inputNumber>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <p:commandButton action="#{Product.add()}"  value="Add Product"  update="form-data-product"></p:commandButton>
+                    </td>
+                </tr>
+            </table>
+        </h:form>
+    </p:dialog>
+
+    <!-- Modal Edit Product -->
+    <p:dialog header="Edit Product" widgetVar="edit-product" minHeight="40" width="350" showEffect="fade" modal="true">
+        <h:form id="form-edit" enctype="multipart/form-data">
+            <table>
+                <tr>
+                    <td>Name</td>
+                    <td>
+                        <h:inputText value="#{Product.productSelected.name}"></h:inputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Image</td>
+                    <td>
+                        <p:fileUpload  mode="simple" value="#{Product.productImage}" required="true" allowTypes="/(\.|\/)(jpe?g|png)$/"></p:fileUpload>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Catalog</td>
+                    <td>
+                        <p:row>
+                            <p:selectOneMenu  value="#{Product.productSelected.catalogId}">
+                                <f:selectItems var="catalog" value="#{Catalog.catalogList}" itemValue="#{catalog.id}" itemLabel="#{catalog.name}"></f:selectItems>
+                            </p:selectOneMenu>
+                        </p:row>
+                        <div class="card">
+                            <p:commandButton value="Add Catalog" type="button" icon="pi pi-external-link" onclick="PF('add-catalog').show()"/>
+                        </div>
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td>Price</td>
+                    <td>
+                        <p:inputNumber  value="#{Product.productSelected.price}"  ></p:inputNumber>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <p:commandButton action="#{Product.update()}"  value="Edit Product" update="form-data-product"></p:commandButton>
+
+                    </td>
+                </tr>
+            </table>
+        </h:form>
+    </p:dialog>
+
+
+    <!-- Modal Add Catalog -->
+    <p:dialog header="Add Catalog" widgetVar="add-catalog" minHeight="40" width="350" showEffect="fade" modal="true">
+        <h:form>
+            <table>
+                <tr>
+                    <td>Name</td>
+                    <td>
+                        <h:inputText value="#{Catalog.catalogName}"></h:inputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <p:commandButton value="Add Catalog" action="#{Catalog.add}" update="form-edit form-add" ></p:commandButton>
+                    </td>
+                </tr>
+            </table>
+        </h:form>
+    </p:dialog>
+</h:body>
+</html>

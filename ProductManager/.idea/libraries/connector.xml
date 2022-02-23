@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="connector">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../Test/ssss/MongoConnectorDemo/lib/connector.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
