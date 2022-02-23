@@ -1,0 +1,21 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="War.Product">
+    <output-path>$PROJECT_DIR$/web</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="ProductManager" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Mojarra-2.4.0" />
+          <element id="library" level="project" name="connector" />
+          <element id="library" level="project" name="mongo-java-driver-3.4.2" />
+          <element id="library" level="project" name="Maven: com.sun.faces:jsf-api:2.2.20" />
+          <element id="library" level="project" name="Maven: com.sun.faces:jsf-impl:2.2.20" />
+          <element id="library" level="project" name="Maven: org.primefaces:primefaces:10.0.0" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="ProductManager/web/Web" />
+    </root>
+  </artifact>
+</component>

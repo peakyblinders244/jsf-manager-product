@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Catalog Manager</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+</h:head>
+
+<h:body>
+    <div class="container">
+        <div class="row">
+            <div class="card">
+                <p:commandButton value="Add Catalog" type="button" icon="pi pi-external-link" onclick="PF('add-catalog').show()"/>
+            </div>
+        </div>
+
+
+
+        <h:form id="form-data">
+            <div class="card">
+                <p:dataTable var="catalog" value="#{Catalog.catalogList}">
+                    <p:column headerText="Id">
+                        <h:outputText value="#{catalog.id}" />
+                    </p:column>
+
+                    <p:column headerText="Name">
+                        <h:outputText value="#{catalog.name}" />
+                    </p:column>
+
+                    <p:column headerText="Edit">
+                        <p:commandButton value="Edit" styleClass="rounded-button" icon="pi pi-check" update="frm-update"
+                                  onclick="PF('edit-catalog').show()">
+
+                            <f:setPropertyActionListener target="#{Catalog.selectedCategory}" value="#{catalog}"/>
+                        </p:commandButton>
+                    </p:column>
+
+                    <p:column headerText="Delete">
+                        <p:commandButton value="Delete" styleClass="rounded-button ui-button-danger" icon="pi pi-times" action="#{Catalog.delete(catalog.id)}" update="form-data">
+                            <p:confirm header="Confirmation" message="Do you want to delete catalog?" icon="pi pi-info-circle"/>
+                        </p:commandButton>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
+                        </p:confirmDialog>
+                    </p:column>
+                </p:dataTable>
+            </div>
+        </h:form>
+        <hr />
+
+    </div>
+
+    <!-- Modal Add Catalog -->
+    <p:dialog header="Add Catalog" widgetVar="add-catalog" minHeight="40" width="350" showEffect="fade" modal="true">
+        <h:form>
+            <table>
+                <tr>
+                    <td>Name</td>
+                    <td>
+                        <h:inputText value="#{Catalog.catalogName}"></h:inputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <p:commandButton update="form-data" value="Add Catalog" action="#{Catalog.add}"></p:commandButton>
+                    </td>
+                </tr>
+            </table>
+        </h:form>
+    </p:dialog>
+
+    <!-- Modal Edit Catalog -->
+    <p:dialog header="Edit Catalog" widgetVar="edit-catalog" minHeight="40" width="350" showEffect="fade" modal="true">
+        <h:form id="frm-update">
+            <table>
+                <tr>
+                    <td>Name</td>
+                    <td>
+                        <p:inputText value="#{Catalog.selectedCategory.name}"></p:inputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <p:commandButton update="form-data" value="Edit Catalog" action="#{Catalog.update}"></p:commandButton>
+                    </td>
+                </tr>
+            </table>
+        </h:form>
+    </p:dialog>
+</h:body>
+</html>
