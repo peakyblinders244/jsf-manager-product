@@ -17,6 +17,36 @@
             <div class="card">
                 <p:commandButton value="Add Product" type="button" icon="pi pi-external-link" onclick="PF('add-product').show()"/>
             </div>
+            <div class="card">
+                <h:form>
+                    <p:commandButton value="Refesh Product" type="sumit" icon="pi pi-external-link" action="#{Product.refreshProduct}"
+                                     update="form-data-product"/>
+                    </h:form>
+            </div>
+        </div>
+
+        <div class="card">
+            <h:form>
+                <p:panel id="panel" header="Search Product" styleClass="p-mb-3">
+                    <p:growl id="messages"/>
+                    <h:panelGrid columns="4" cellpadding="7">
+                        <div>
+                            <h:outputLabel for="nameProductSearch" value="Nhập Tên Sản Phẩm: *"/>
+                            <p:inputText id="nameProductSearch" value="#{Product.nameProductSearch}" required="true" label="Text 1" style="width: 12rem">
+                                <f:validateLength minimum="2"/>
+                            </p:inputText>
+                            <p:message for="nameProductSearch"/>
+                        </div>
+                        <div>
+                            <h:outputLabel for="nameCatalog" value="Tên Danh Mục: *"/>
+                            <p:selectOneMenu id="nameCatalog" value="#{Product.nameCatalogSearch}" required="true" label="Tên Danh Mục" style="width: 12rem">
+                                <f:selectItems var="catalog" value="#{Catalog.catalogList}" itemValue="#{catalog.id}" itemLabel="#{catalog.name}"></f:selectItems>
+                            </p:selectOneMenu>
+                        </div>
+                    </h:panelGrid>
+                </p:panel>
+                <p:commandButton value="Tìm kiếm" action="#{Product.searchProduct}" styleClass="p-mr-2" update="form-data-product"/>
+            </h:form>
         </div>
 
         <div class="card product">

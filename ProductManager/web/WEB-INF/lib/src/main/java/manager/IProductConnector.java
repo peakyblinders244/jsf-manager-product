@@ -14,6 +14,8 @@ public interface IProductConnector {
 
     List<Product> searchProductByName(String value);
 
+    List<Product> searchProductByCatalog(String value);
+
     void delete(String id);
 
     void update(Product product);

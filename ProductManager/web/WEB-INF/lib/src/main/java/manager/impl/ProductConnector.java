@@ -40,7 +40,14 @@ public class ProductConnector extends BaseConnector implements IProductConnector
 
     @Override
     public List<Product> searchProductByName(String value) {
-        return null;
+        String property = "name";
+        return getMongoObjectConnectorProduct().getObjectMatchProperty(property,value,new ProductFactory());
+    }
+
+    @Override
+    public List<Product> searchProductByCatalog(String value) {
+        String property = "catalogId";
+        return getMongoObjectConnectorProduct().getObjectMatchProperty(property,value,new ProductFactory());
     }
 
     @Override
@@ -54,4 +61,6 @@ public class ProductConnector extends BaseConnector implements IProductConnector
         IDynamicObject iDynamicObject = factory.createObject(product);
         getMongoObjectConnectorProduct().update(iDynamicObject);
     }
+
+
 }

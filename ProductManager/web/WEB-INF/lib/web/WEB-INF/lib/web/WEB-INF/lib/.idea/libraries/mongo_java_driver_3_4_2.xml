@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="mongo-java-driver-3.4.2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../Test/ssss/MongoConnectorDemo/lib/mongo-java-driver-3.4.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../Test/ssss/MongoConnectorDemo/lib/MongoDynamicObject.jar!/" />
+      <root url="file://$PROJECT_DIR$" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/src/main/java" />
+    </SOURCES>
+  </library>
+</component>

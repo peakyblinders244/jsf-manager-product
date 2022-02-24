@@ -15,6 +15,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,9 +33,12 @@ public class ProductBean extends BaseBean{
     private String productCatalogId;
     private Product productSelected;
     private Map<String, Catalog> catalogMap;
+    private String nameProductSearch = null;
+    private String nameCatalogSearch = null;
+
     private final static String IMAGE_STORE="C:\\Users\\lhqua\\HongQuan\\Product-Manager\\jsf-product-manager\\ProductManager\\images";
     public List<Product> getProductList() {
-        productList = productConnector.getProductList();
+        //productList = productConnector.getProductList();
         return productList;
     }
 
@@ -98,6 +102,22 @@ public class ProductBean extends BaseBean{
         this.productSelected = productSelected;
     }
 
+    public String getNameProductSearch() {
+        return nameProductSearch;
+    }
+
+    public void setNameProductSearch(String nameProductSearch) {
+        this.nameProductSearch = nameProductSearch;
+    }
+
+    public String getNameCatalogSearch() {
+        return nameCatalogSearch;
+    }
+
+    public void setNameCatalogSearch(String nameCatalogSearch) {
+        this.nameCatalogSearch = nameCatalogSearch;
+    }
+
     @PostConstruct
     public void init(){
 
@@ -109,7 +129,7 @@ public class ProductBean extends BaseBean{
         for (Catalog temp: catalogList) {
             catalogMap.put(temp.getId(),temp);
         }
-
+        productList = productConnector.getProductList();
     }
 
     public String getNameCatalogById(String catalogId){
@@ -147,6 +167,7 @@ public class ProductBean extends BaseBean{
         } catch (Exception ex) {
             addError("Exception: " + ex.getMessage());
         }
+        productList = productConnector.getProductList();
     }
 
     public void update(){
@@ -171,6 +192,7 @@ public class ProductBean extends BaseBean{
         } catch (Exception ex) {
             addError("Exception: " + ex.getMessage());
         }
+        productList = productConnector.getProductList();
     }
 
     public void delete(String id){
@@ -180,5 +202,26 @@ public class ProductBean extends BaseBean{
         }catch (Exception ex){
             addError("Exception: " + ex.getMessage());
         }
+        productList = productConnector.getProductList();
+    }
+
+    public void searchProduct(){
+        List<Product> productSearchByNameList = null;
+        if(nameProductSearch != null) {
+            productSearchByNameList = productConnector.searchProductByName(nameProductSearch);
+        }
+
+        if(productSearchByNameList != null) {
+            productList = productSearchByNameList;
+        }
+        for (Product product: productList) {
+            if(!product.getCatalogId().contains(nameCatalogSearch)){
+                productList.remove(product);
+            }
+        }
+    }
+
+    public void refreshProduct(){
+        productList = productConnector.getProductList();
     }
 }
